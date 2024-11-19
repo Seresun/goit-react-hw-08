@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addContact, deleteContact, fetchContacts } from './operations';
+import { logout } from '../auth/operations';  // Исправлено на "logout"
 
 const handlePending = state => {
   state.loading = true;
 };
+
 const handleRejected = (state, action) => {
   state.loading = false;
   state.error = action.payload;
@@ -40,6 +42,11 @@ const contactsSlice = createSlice({
         state.items = state.items.filter(
           contact => contact.id !== action.payload.id
         );
+      })
+      .addCase(logout.fulfilled, state => {  // Обработчик для logout
+        state.items = [];
+        state.error = null;
+        state.loading = false;
       });
   },
 });
